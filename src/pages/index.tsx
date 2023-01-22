@@ -9,9 +9,9 @@ export interface IPost {
   body: string;
 }
 
-type HomeProps = { posts: IPost[] };
+type HomeProps = { posts: IPost[]; date: string };
 
-export default function Home({ posts }: HomeProps) {
+export default function Home({ posts, date }: HomeProps) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -27,7 +27,9 @@ export default function Home({ posts }: HomeProps) {
       <Head>
         <title>Mon super blog</title>
       </Head>
-      <h1>Count: {count}</h1>
+      <h1>
+        Count: {count} - {date}
+      </h1>
       <ul>
         {posts.map((post) => (
           <li key={post.id}>
@@ -46,5 +48,5 @@ export async function getStaticProps() {
     "https://jsonplaceholder.typicode.com/posts?_limit=4"
   ).then((r) => r.json())) as IPost[];
 
-  return { props: { posts } };
+  return { props: { posts, date: new Date().toString() }, revalidate: 5 };
 }
